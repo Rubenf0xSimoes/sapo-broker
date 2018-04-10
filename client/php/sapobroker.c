@@ -89,7 +89,12 @@ PHP_MINFO_FUNCTION(sapobroker) {
 PHP_FUNCTION(broker_add_server) {
     int argc = ZEND_NUM_ARGS();
     char *hostname;
-    long port, namelen;
+    long port;
+#if PHP_MAJOR_VERSION < 7
+    long namelen;
+#else
+    size_t namelen;
+#endif
     long transport, protocol;
     zval *zsapo_broker = NULL;
     sapo_broker_t *sapo_broker;
@@ -156,8 +161,13 @@ PHP_FUNCTION(broker_enqueue) {
     char *queue = NULL;
     char *message = NULL;
     int argc = ZEND_NUM_ARGS();
+#if PHP_MAJOR_VERSION < 7
     int queue_len;
     int message_len;
+#else
+    size_t queue_len;
+    size_t message_len;
+#endif
     zval *zsapo_broker = NULL;
     int retval;
     sapo_broker_t *sapo_broker;
@@ -215,7 +225,12 @@ PHP_FUNCTION(broker_error) {
 PHP_FUNCTION(broker_init) {
     int argc = ZEND_NUM_ARGS();
     char *hostname;
-    long port, namelen;
+    long port;
+#if PHP_MAJOR_VERSION < 7
+    long namelen;
+#else
+    size_t namelen;
+#endif
     long transport, protocol;
 
     if (zend_parse_parameters(argc TSRMLS_CC, "slll", &hostname, &namelen, &port, &transport, &protocol) == FAILURE)
